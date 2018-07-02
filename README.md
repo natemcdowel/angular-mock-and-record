@@ -1,2 +1,2 @@
-# angular-mock-and-record
-A protractor framework that mocks and records http responses
+# angular-mock-record
+An angular 4+ framework that mocks and records requests. Requests can be manually mocked or recorded like VCR.
