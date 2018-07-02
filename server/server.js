@@ -1,6 +1,6 @@
 const express = require('express');
 const RequestHandler = require('./request.handler.js');
-const config = require('../../platform-ui-2/mock.record.config.json');
+const config = require('../../../mock.record.config.json');
 
 class MockServer {
 
