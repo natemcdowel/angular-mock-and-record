@@ -2,7 +2,7 @@ const express = require('express');
 const RequestHandler = require('./request.handler.js');
 try {
   let config = require('../../../mock.record.config.json');
-} catch {
+} catch(e) {
   console.error('The mock.record.config.json configuration file is missing. Please add this configuration and retry.')
 }
 
