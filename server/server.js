@@ -12,8 +12,13 @@ class MockServer {
   start() {
     this.app.listen(config.port || 3000, () => console.log('Mock API running on port ' + config.port + '..'));
     this.app.use((req, res) => {
+      req.url = this.rewritePathToMocks(req.url);
       this.requestHandler.handle(req, res);
     });
+  }
+
+  rewritePathToMocks(url) {
+    return url.replace(config.proxied_mock_server_route, '');
   }
 }
 

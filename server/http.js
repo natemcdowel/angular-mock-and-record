@@ -6,11 +6,13 @@ class Http {
   }
 
   get(req) {
+
     return new Promise((resolve, reject) => {
       this.http.get(
       {
-        json: true,
-        url: this.config.domain + req.url
+        url: this.config.domain + req.url,
+        jar: true,
+        headers: this.setRequestHeaders(req.headers)
       }, (error, response, body) => {
 
         if (error) {
@@ -25,6 +27,16 @@ class Http {
 
       });
     });
+  }
+
+  setRequestHeaders(requestHeaders) {
+    let out = {};
+
+    this.config.request_headers.forEach(header => {
+      out[header] = requestHeaders[header];
+    });
+
+    return out;
   }
 
   setCorsHeaders(req, res) {
