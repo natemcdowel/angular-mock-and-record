@@ -10,6 +10,7 @@ class Http {
     return new Promise((resolve, reject) => {
       this.http.get(
       {
+        json: true,
         url: this.config.domain + req.url,
         jar: true,
         headers: this.setRequestHeaders(req.headers)
