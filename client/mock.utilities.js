@@ -15,15 +15,16 @@ var MockUtilities = /** @class */ (function () {
 		browser.executeScript(this.getMockRequest(endpoint, mockResponse));
 	};
 	MockUtilities.prototype.getMockRequest = function (endpoint, mockResponse, method) {
-		var url = this.api_host + '/mock/' + endpoint + '?response=' + encodeURIComponent(JSON.stringify(mockResponse));
+		var url = this.api_host + '/mock/' + endpoint;
 		var xmlHttp = new XMLHttpRequest();
 		if (!method) {
-			xmlHttp.open('GET', url, false);
+			xmlHttp.open('POST', url, false);
 		}
 		else {
 			xmlHttp.open(method, url, false);
 		}
-		xmlHttp.send(null);
+		xmlHttp.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+		xmlHttp.send(JSON.stringify(mockResponse));
 		return xmlHttp.responseText;
 	};
 	MockUtilities.prototype.clearMocks = function () {

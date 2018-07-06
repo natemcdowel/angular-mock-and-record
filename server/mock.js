@@ -5,7 +5,7 @@ class Mock {
   }
 
   setRequestAsMocked(res, path, response) {
-    this.mockedRequests[ path.replace('mock/', '') ] = JSON.parse(response);
+    this.mockedRequests[ path.replace('mock/', '') ] = response;
   }
 
   clearMockedRequests() {

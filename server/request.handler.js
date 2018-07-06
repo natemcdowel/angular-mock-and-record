@@ -22,7 +22,7 @@ class RequestHandler {
   
     if (this.shouldMock(req.path)) {
 
-      this.mock.setRequestAsMocked(res, req.path, req.query.response);
+      this.mock.setRequestAsMocked(res, req.path, req.body);
       res.status(200).send(true);
 
     } else if (this.shouldClearMocks(req.path)) {
