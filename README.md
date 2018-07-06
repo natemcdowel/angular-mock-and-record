@@ -26,13 +26,13 @@ An angular 4+ framework that mocks and records requests. Requests can be manuall
 
 
 # Mocking
-Import in the protractor spec file:
+- Import in the protractor spec file:
 
 
 `import { MockUtilities } from 'angular-mock-record/client/mock.utilities';`
 
 
-Then mock requests in beforeEach or beforeAll:
+- Then mock requests in beforeEach or beforeAll:
 
 
 `
@@ -41,7 +41,7 @@ beforeAll(() => {
 )};
 `
 
-Next run tests in the describe block:
+- Next run tests in the describe block:
 
 
 `    
@@ -51,7 +51,7 @@ it('should have the mocked request data', () => {
 `
 
 
-Finally, be sure to clearMocks before moving to a new describe:
+- Finally, be sure to clearMocks before moving to a new describe:
 
 `
 afterAll(() => {
