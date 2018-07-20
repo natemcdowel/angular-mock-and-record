@@ -63,3 +63,9 @@ afterAll(() => {
 - Set `domain` as the request path that will be used to make requests and record.
 - Set an array of params that need to be excluded from request url matching via `exclude_params`. Ex: `exclude_params: ['sort']`
 - Set an array of params that need to be normalized in request url via `normalize_params`. Ex: `normalize_params: ['randomly_generated_id']`
+- Set `allow_recording` to true to fail when a new recording is detected. This is handy for continuous integration tools such as Travis CI.
+
+# Running the server
+
+- Run `node ./node_modules/angular-mock-record/server/server.js <allow_recording>`
+- Hit `http://localhost:<port>/<api_path>` in a browser to test the recording functionality.  Once recorded, requests matching this URL will return the captured recording. 
