@@ -32,7 +32,7 @@ An angular 4+ framework that mocks and records requests. Requests can be manuall
 `import { MockUtilities } from 'angular-mock-record/client/mock.utilities';`
 
 
-- Then mock requests in beforeEach or beforeAll:
+- Then, mock requests in beforeEach or beforeAll:
 
 
 `
@@ -41,7 +41,7 @@ beforeAll(() => {
 )};
 `
 
-- Next run tests in the describe block:
+- Next, run tests in the describe block:
 
 
 `    
