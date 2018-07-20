@@ -68,4 +68,5 @@ afterAll(() => {
 # Running the server
 
 - Run `node ./node_modules/angular-mock-record/server/server.js <allow_recording>`
-- Hit `http://localhost:<port>/<api_path>` in a browser to test the recording functionality.  Once recorded, requests matching this URL will return the captured recording. 
+- Hit `http://localhost:<port>/<api_path>` in a browser to test the recording functionality.  Once recorded, requests matching this URL will return the captured recording.
+- Finally, set up your application's configuration to point to `http://localhost:<port>/<api_path>`. Start the server, then run `ng e2e`.  All requests should be recorded unless they are otherwise mocked.
