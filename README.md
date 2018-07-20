@@ -58,3 +58,8 @@ afterAll(() => {
   mockUtilities.clearMocks();
 });
 `
+# Setting up mock.record.config.json for recording
+
+- Set `domain` as the request path that will be used to make requests and record.
+- Set an array of params that need to be excluded from request url matching via `exclude_params`. Ex: `exclude_params: ['sort']`
+- Set an array of params that need to be normalized in request url via `normalize_params`. Ex: `normalize_params: ['randomly_generated_id']`
