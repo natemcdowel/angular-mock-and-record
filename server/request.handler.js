@@ -51,7 +51,7 @@ class RequestHandler {
     } else {
 
       if (!this.recordingAllowed()) {
-        console.error('\nAn unrecorded request was detected\n');
+        console.error('\nAn unrecorded request was detected:\n' + req.url);
         console.error('\nTo record new requests, use the `allow_recording` parameter\n');
         process.exit(1);
       }
