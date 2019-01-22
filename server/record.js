@@ -24,8 +24,16 @@ class Record {
 
     if (tape) {
       let recording = this.isRecordingOnTape(requestUrl, tape);
-      if (recording.length) {
+      let recordingWithDomain = recording ? recording.find(rec => rec.domain === this.config.domain) : null;
+
+      if (recording.length && !recordingWithDomain) {
+
         out = recording[0];
+
+      } else if (recordingWithDomain) {
+
+        out = recordingWithDomain;
+
       }
     }
   
@@ -72,6 +80,10 @@ class Record {
 
     if (tape) {  
       out = tape;
+    }
+
+    if (this.config.domain) {
+      data.domain = this.config.domain;
     }
 
     out.push(data);

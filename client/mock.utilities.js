@@ -37,6 +37,16 @@ var MockUtilities = /** @class */ (function () {
 		xmlHttp.send(null);
 		return xmlHttp.responseText;
 	};
+	MockUtilities.prototype.setClient = function (domain) {
+		browser.executeScript(this.setClientRequest(domain));
+	};
+	MockUtilities.prototype.setClientRequest = function (domain) {
+		var url = this.api_host + '/domain/' + domain;
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.open('GET', url, false);
+		xmlHttp.send(null);
+		return xmlHttp.responseText;
+	};
 	return MockUtilities;
 }());
 exports.MockUtilities = MockUtilities;
