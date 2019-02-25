@@ -10,6 +10,9 @@ catch (e) {
 var MockUtilities = /** @class */ (function () {
 	function MockUtilities() {
 		this.api_host = api_host;
+		if (browser.baseUrl.indexOf('process_port') > -1) {
+			this.api_host = 'http://localhost:' + browser.baseUrl.split('?process_port=')[1];
+		}
 	}
 	MockUtilities.prototype.mockRequest = function (endpoint, mockResponse, method) {
 		browser.executeScript(this.getMockRequest(endpoint, mockResponse));

@@ -14,7 +14,7 @@ class MockServer {
   }
 
   start() {
-    this.app.listen(config.port || 3000, () => console.log('Mock API running on port ' + config.port + '..'));
+    this.app.listen(process.argv[3] || 3000, () => console.log('Mock API running on port ' + process.argv[3] || 3000 + '..'));
     this.app.all('*', (req, res) => {
       req.url = this.rewritePathToMocks(req.url);
       this.requestHandler.handle(req, res);
