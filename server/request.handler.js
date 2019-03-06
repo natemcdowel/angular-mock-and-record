@@ -6,15 +6,16 @@ const Utilities = require('./utilities.js');
 class RequestHandler {
 
   constructor(config) {
-    this.defaultDomain = config.domain;
     this.config = config;
     this.http = new Http(this.config);
     this.recorder = new Record(this.config);
     this.mock = new Mock();
     this.utilities = new Utilities();
+    this.login();
   }
 
   handle(req, res) {
+
     const matchedPath = this.utilities.matchPath(req.path);
 
     if (this.config.cors) {
@@ -26,15 +27,9 @@ class RequestHandler {
       this.mock.setRequestAsMocked(res, req.path, req.body);
       res.status(200).send(true);
 
-    } else if (this.shouldSetDomain(req.path)) {
-  
-      this.setDomain(req.path);
-      res.status(200).send(true);
-
     } else if (this.shouldClearMocks(req.path)) {
   
       this.mock.clearMockedRequests();
-      this.setDefaultDomain();
       res.status(200).send(true);
 
     } else if (this.hasRequestBeenMocked(matchedPath)) {
@@ -96,26 +91,26 @@ class RequestHandler {
     return !!( path.includes('/clear') );
   }
 
-  shouldSetDomain(path) {
-    return !!( path.includes('/domain/') );
+  login() {
+    console.log(this.config.domain);
+    this.http.post(
+      this.config.domain + '/idp/auth',
+      { 'username': 'HSA_w_telehealth_vnh_1' }
+    ).then(data => {
+      const input = '<input type="hidden" name="SAMLResponse" id="SAMLResponse" value=';
+      const end = ' />';
+      const SAMLResponse = data.body.split(input)[1].split(end)[0].replace(`"`,``).trim();
+
+      this.http.post(
+        this.config.domain + '/auth/consume',
+        { 'SAMLResponse': SAMLResponse, 'relaystate': ''}
+      ).then(data => {
+        this._session_id = data.headers['set-cookie'].find(cookie => cookie.indexOf('_session_id') > -1);
+        console.log(this._session_id);
+      });
+    });
   }
 
-  setDomain(path) {
-    path = path.split('/');
-    this.config.domain = 'https://' + path[path.length - 1];
-    this.refreshConfigs();
-  }
-
-  setDefaultDomain() {
-    this.config.domain = this.defaultDomain;
-    this.refreshConfigs();
-  }
-
-  refreshConfigs() {
-    this.http = new Http(this.config);
-    this.recorder = new Record(this.config);
-  }
- 
 }
 
 module.exports = RequestHandler;
