@@ -30,6 +30,29 @@ class Http {
     });
   }
 
+  post(url, form) {
+    return new Promise((resolve, reject) => {
+      this.http.post(
+      {
+        url: url,
+        jar: true,
+        form: form,
+      }, (error, response, body) => {
+
+        if (error) {
+          reject(error);
+        }
+
+        resolve({
+          status: response.statusCode,
+          body: response.body,
+          headers: response.headers
+        });
+
+      });
+    });
+  }
+
   setRequestHeaders(requestHeaders) {
     let out = {};
 
