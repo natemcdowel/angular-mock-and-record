@@ -1,6 +1,7 @@
 const Http = require('./http.js');
 const Record = require('./record.js');
 const Mock = require('./mock.js');
+const Auth = require('./auth.js');
 const Utilities = require('./utilities.js');
 
 class RequestHandler {
@@ -11,6 +12,7 @@ class RequestHandler {
     this.http = new Http(this.config);
     this.recorder = new Record(this.config);
     this.mock = new Mock();
+    this.auth = new Auth();
     this.utilities = new Utilities();
   }
 
@@ -36,6 +38,12 @@ class RequestHandler {
       this.mock.clearMockedRequests();
       this.setDefaultDomain();
       res.status(200).send(true);
+
+    } else if (this.shouldLogin(req.path)) {
+  
+      this.auth.login( this.auth.getUser(req.path) ).then(status => {
+        res.status(200).send(true);
+      });
 
     } else if (this.hasRequestBeenMocked(matchedPath)) {
 
@@ -94,6 +102,10 @@ class RequestHandler {
 
   shouldClearMocks(path) {
     return !!( path.includes('/clear') );
+  }
+
+  shouldLogin(path) {
+    return !!( path.includes('/login') );
   }
 
   shouldSetDomain(path) {
