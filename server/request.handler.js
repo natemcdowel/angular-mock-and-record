@@ -1,20 +1,23 @@
 const Http = require('./http.js');
 const Record = require('./record.js');
 const Mock = require('./mock.js');
+const Auth = require('./auth.js');
 const Utilities = require('./utilities.js');
 
 class RequestHandler {
 
   constructor(config) {
-    this.defaultDomain = config.domain;
     this.config = config;
     this.http = new Http(this.config);
     this.recorder = new Record(this.config);
     this.mock = new Mock();
+    this.auth = new Auth();
     this.utilities = new Utilities();
+    this.login();
   }
 
   handle(req, res) {
+
     const matchedPath = this.utilities.matchPath(req.path);
 
     if (this.config.cors) {
@@ -26,16 +29,16 @@ class RequestHandler {
       this.mock.setRequestAsMocked(res, req.path, req.body);
       res.status(200).send(true);
 
-    } else if (this.shouldSetDomain(req.path)) {
-  
-      this.setDomain(req.path);
-      res.status(200).send(true);
-
     } else if (this.shouldClearMocks(req.path)) {
   
       this.mock.clearMockedRequests();
-      this.setDefaultDomain();
       res.status(200).send(true);
+
+    } else if (this.shouldLogin(req.path)) {
+  
+      this.auth.login( this.auth.getUser(req.path) ).then(status => {
+        res.status(200).send(true);
+      });
 
     } else if (this.hasRequestBeenMocked(matchedPath)) {
 
@@ -96,6 +99,10 @@ class RequestHandler {
     return !!( path.includes('/clear') );
   }
 
+  shouldLogin(path) {
+    return !!( path.includes('/login') );
+  }
+
   shouldSetDomain(path) {
     return !!( path.includes('/domain/') );
   }
@@ -111,11 +118,6 @@ class RequestHandler {
     this.refreshConfigs();
   }
 
-  refreshConfigs() {
-    this.http = new Http(this.config);
-    this.recorder = new Record(this.config);
-  }
- 
 }
 
 module.exports = RequestHandler;
