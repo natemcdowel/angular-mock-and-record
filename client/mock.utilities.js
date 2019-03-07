@@ -50,6 +50,16 @@ var MockUtilities = /** @class */ (function () {
 		xmlHttp.send(null);
 		return xmlHttp.responseText;
 	};
+	MockUtilities.prototype.login = function (user) {
+		browser.executeScript(this.loginRequest(user));
+	};
+	MockUtilities.prototype.loginRequest = function (user) {
+		var url = this.api_host + '/login/' + user;
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.open('GET', url, false);
+		xmlHttp.send(null);
+		return xmlHttp.responseText;
+	};
 	return MockUtilities;
 }());
 exports.MockUtilities = MockUtilities;
