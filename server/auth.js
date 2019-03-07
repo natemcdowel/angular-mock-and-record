@@ -1,23 +1,26 @@
 const Http = require('./http.js');
+const samlInputStart = '<input type="hidden" name="SAMLResponse" id="SAMLResponse" value=';
+const samlInputEnd = ' />';
 
 class Auth {
 
   constructor() {
     this.http = new Http();
+    this._session_id = '';
   }
 
-  login(user) {
+  login(user, domain) {
     return new Promise(resolve => {
       this.http.post(
-        this.config.domain + '/idp/auth',
+        domain + '/idp/auth',
         {
           'username': user
         }
       ).then(data => {
         const SAMLResponse = data.body.split(samlInputStart)[1].split(samlInputEnd)[0].replace(`"`,``).trim();
-  
+        
         this.http.post(
-          this.config.domain + '/auth/consume',
+          domain + '/auth/consume',
           {
             'SAMLResponse': SAMLResponse,
             'relaystate': ''
@@ -26,6 +29,9 @@ class Auth {
           this._session_id = data.headers['set-cookie'].find(cookie => cookie.indexOf('_session_id') > -1);
           console.log('Successfully logged in as: ' + user + ', _session_id: ' + this._session_id);
           resolve(this._session_id);
+        }, () => {
+          console.log('Error logging in!');
+          resolve('');
         });
       });
     });
@@ -33,8 +39,7 @@ class Auth {
 
   getUser(path) {
     path = path.split('/');
-    console.log(path);
-    return path[1];
+    return path[2];
   }
 }
 

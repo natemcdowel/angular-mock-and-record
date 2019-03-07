@@ -7,13 +7,13 @@ const Utilities = require('./utilities.js');
 class RequestHandler {
 
   constructor(config) {
+    this.defaultDomain = config.domain;
     this.config = config;
     this.http = new Http(this.config);
     this.recorder = new Record(this.config);
     this.mock = new Mock();
     this.auth = new Auth();
     this.utilities = new Utilities();
-    this.login();
   }
 
   handle(req, res) {
@@ -29,14 +29,21 @@ class RequestHandler {
       this.mock.setRequestAsMocked(res, req.path, req.body);
       res.status(200).send(true);
 
+    } else if (this.shouldSetDomain(req.path)) {
+
+      this.setDomain(req.path);
+      res.status(200).send(true);
+
     } else if (this.shouldClearMocks(req.path)) {
   
       this.mock.clearMockedRequests();
+      this.auth._session_id = '';
+      this.setDefaultDomain();
       res.status(200).send(true);
 
     } else if (this.shouldLogin(req.path)) {
-  
-      this.auth.login( this.auth.getUser(req.path) ).then(status => {
+
+      this.auth.login( this.auth.getUser(req.path), this.config.domain ).then(_session_id => {
         res.status(200).send(true);
       });
 
@@ -66,7 +73,7 @@ class RequestHandler {
         process.exit(1);
       }
 
-      this.http.get(req).then(data => {
+      this.http.get(req, this.auth._session_id).then(data => {
 
         this.sendResponse(data, res);
         data.mock_request_url = req.url;
@@ -100,11 +107,16 @@ class RequestHandler {
   }
 
   shouldLogin(path) {
-    return !!( path.includes('/login') );
+    return !!( path.includes('/login/') );
   }
 
   shouldSetDomain(path) {
     return !!( path.includes('/domain/') );
+  }
+  
+  refreshConfigs() {
+    this.http = new Http(this.config);
+    this.recorder = new Record(this.config);
   }
 
   setDomain(path) {
