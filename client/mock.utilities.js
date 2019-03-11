@@ -50,6 +50,16 @@ var MockUtilities = /** @class */ (function () {
 		xmlHttp.send(null);
 		return xmlHttp.responseText;
 	};
+	MockUtilities.prototype.setContext = function (context) {
+		browser.executeScript(this.setContextRequest(context));
+	};
+	MockUtilities.prototype.setContextRequest = function (context) {
+		var url = this.api_host + '/context/' + context;
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.open('GET', url, false);
+		xmlHttp.send(null);
+		return xmlHttp.responseText;
+	};
 	MockUtilities.prototype.login = function (user) {
 		browser.executeScript(this.loginRequest(user));
 	};

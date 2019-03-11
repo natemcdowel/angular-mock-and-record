@@ -8,6 +8,7 @@ class RequestHandler {
 
   constructor(config) {
     this.defaultDomain = config.domain;
+    this.defaultContext = null;
     this.config = config;
     this.http = new Http(this.config);
     this.recorder = new Record(this.config);
@@ -34,11 +35,17 @@ class RequestHandler {
       this.setDomain(req.path);
       res.status(200).send(true);
 
+    } else if (this.shouldSetContext(req.path)) {
+
+      this.setContext(req.path);
+      res.status(200).send(true);
+
     } else if (this.shouldClearMocks(req.path)) {
   
       this.mock.clearMockedRequests();
       this.auth._session_id = '';
       this.setDefaultDomain();
+      this.setDefaultContext();
       res.status(200).send(true);
 
     } else if (this.shouldLogin(req.path)) {
@@ -113,10 +120,20 @@ class RequestHandler {
   shouldSetDomain(path) {
     return !!( path.includes('/domain/') );
   }
+
+  shouldSetContext(path) {
+    return !!( path.includes('/context/') );
+  }
   
   refreshConfigs() {
     this.http = new Http(this.config);
     this.recorder = new Record(this.config);
+  }
+
+  setContext(path) {
+    path = path.split('/');
+    this.config.context = path[2];
+    this.refreshConfigs();
   }
 
   setDomain(path) {
@@ -127,6 +144,11 @@ class RequestHandler {
 
   setDefaultDomain() {
     this.config.domain = this.defaultDomain;
+    this.refreshConfigs();
+  }
+
+  setDefaultContext() {
+    this.config.context = this.defaultContext;
     this.refreshConfigs();
   }
 
