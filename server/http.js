@@ -45,11 +45,15 @@ class Http {
           reject(error);
         }
 
-        resolve({
-          status: response.statusCode,
-          body: response.body,
-          headers: response.headers
-        });
+        if (response) {
+          resolve({
+            status: response.statusCode,
+            body: response.body,
+            headers: response.headers
+          });
+        } else {
+          reject();
+        }
 
       });
     });
