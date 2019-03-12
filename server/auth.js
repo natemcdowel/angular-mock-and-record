@@ -17,6 +17,11 @@ class Auth {
           'username': user
         }
       ).then(data => {
+
+        if (!data) {
+          return resolve();
+        }
+
         const SAMLResponse = data.body.split(samlInputStart)[1].split(samlInputEnd)[0].replace(`"`,``).trim();
         
         this.http.post(

@@ -40,11 +40,6 @@ class Http {
         jar: true,
         form: form,
       }, (error, response, body) => {
-
-        if (error) {
-          reject(error);
-        }
-
         if (response) {
           resolve({
             status: response.statusCode,
@@ -52,7 +47,7 @@ class Http {
             headers: response.headers
           });
         } else {
-          reject();
+          resolve();
         }
 
       });
