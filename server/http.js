@@ -8,12 +8,14 @@ class Http {
   get(req, _session_id) {
 
     return new Promise((resolve, reject) => {
+      let headers = this.setRequestHeaders(req.headers, _session_id);
+
       this.http.get(
       {
         json: true,
-        url: this.config.domain + req.url,
         jar: true,
-        headers: this.setRequestHeaders(req.headers, _session_id)
+        url: this.config.domain + req.url,
+        headers: headers
       }, (error, response, body) => {
 
         if (error) {
@@ -57,10 +59,6 @@ class Http {
     let out = {
       'cookie': _session_id
     };
-
-    this.config.request_headers.forEach(header => {
-      out[header] = requestHeaders[header];
-    });
 
     return out;
   }

@@ -24,8 +24,8 @@ class Record {
 
     if (tape) {
       let recording = this.isRecordingOnTape(requestUrl, tape);
-      let recordingWithDomain = recording ? recording.find(rec => rec.domain === this.config.domain) : null;
-      let recordingWithContext = recording ? recording.find(rec => rec.context === this.config.context) : null;
+      let recordingWithDomain = recording ? recording.find(rec => !!(rec.domain === this.config.domain && !rec.context)) : null;
+      let recordingWithContext = recording ? recording.find(rec => !!(rec.context === this.config.context && rec.domain === this.config.domain)) : null;
       let shouldCheckContext = this.config.context;
 
       if (recording.length) {
@@ -36,7 +36,7 @@ class Record {
           out = recording[0];
   
         // If no context and domain, use the domain recording
-        } else if (!shouldCheckContext && recordingWithDomain) {
+        } else if (!shouldCheckContext && recordingWithDomain && !recordingWithDomain.context) {
           
           out = recordingWithDomain;
 
