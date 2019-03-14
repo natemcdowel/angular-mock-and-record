@@ -65,6 +65,21 @@ afterAll(() => {
 - Set an array of params that need to be normalized in request url via `normalize_params`. Ex: `normalize_params: ['randomly_generated_id']`
 - Set `allow_recording` to true to fail when a new recording is detected. This is handy for continuous integration tools such as Travis CI.
 
+# Functionality
+
+- To set the client to login as (If not specified, product demo a is the default):
+  `mockUtilities.setClient( clientOverride.getClientDomain(<client>) );`
+
+- To login and record authenticated requests, use:
+  `mockUtilities.login(<user from idp auth>);`
+
+- To set a "context" and limit new recordings to the scope of that context:
+  `mockUtilities.setContext(<name of context>);`
+
+- As usual, clear the mocks in the afterAll block at the end of the spec file. This will also reset context, client and login status:
+  `mockUtilities.clearMocks();`
+
+
 # Running the server
 
 - Run `node ./node_modules/angular-mock-record/server/server.js allow_recording`
