@@ -4,8 +4,11 @@ class Mock {
     this.mockedRequests = {};
   }
 
-  setRequestAsMocked(res, path, response) {
-    this.mockedRequests[ path.replace('mock/', '') ] = response;
+  setRequestAsMocked(path, response, headers) {
+    this.mockedRequests[ path.replace('mock/', '') ] = {
+      response: response,
+      headers: headers
+    };
   }
 
   clearMockedRequests() {

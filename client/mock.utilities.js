@@ -14,19 +14,17 @@ var MockUtilities = /** @class */ (function () {
 			this.api_host = 'http://localhost:' + browser.baseUrl.split('?process_port=')[1];
 		}
 	}
-	MockUtilities.prototype.mockRequest = function (endpoint, mockResponse, method) {
-		browser.executeScript(this.getMockRequest(endpoint, mockResponse));
+	MockUtilities.prototype.mockRequest = function (endpoint, mockResponse, matchOnQuery) {
+		browser.executeScript(this.getMockRequest(endpoint, mockResponse, matchOnQuery));
 	};
-	MockUtilities.prototype.getMockRequest = function (endpoint, mockResponse, method) {
+	MockUtilities.prototype.getMockRequest = function (endpoint, mockResponse, matchOnQuery) {
 		var url = this.api_host + '/mock/' + endpoint;
 		var xmlHttp = new XMLHttpRequest();
-		if (!method) {
-			xmlHttp.open('POST', url, false);
-		}
-		else {
-			xmlHttp.open(method, url, false);
-		}
+		xmlHttp.open('POST', url, false);
 		xmlHttp.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+		if (matchOnQuery) {
+			xmlHttp.setRequestHeader('Mock-Param', matchOnQuery);
+		}
 		xmlHttp.send(JSON.stringify(mockResponse));
 		return xmlHttp.responseText;
 	};
