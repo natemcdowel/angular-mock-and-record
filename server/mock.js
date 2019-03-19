@@ -21,7 +21,7 @@ class Mock {
   }
 
   hasRequestBeenMocked(matchedPath, matchedUrl) {
-    const foundMock = this.mockedRequests[ matchedPath ];
+    let foundMock = this.mockedRequests[ matchedPath ];
 
     this.utilities.getParams(matchedUrl).forEach(param => {
       if (this.mockedRequests[ matchedPath + '|' + param ]) {
@@ -29,10 +29,7 @@ class Mock {
       }
     });
 
-    return !!(
-      (foundMock && !foundMock.headers['mock-param']) ||
-      (foundMock && foundMock.headers['mock-param'] && matchedUrl.indexOf(foundMock.headers['mock-param']) > -1)
-    );
+    return foundMock;
   }
 }
 

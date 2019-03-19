@@ -20,6 +20,7 @@ class RequestHandler {
   handle(req, res) {
 
     const matchedPath = this.utilities.matchPath(req.path);
+    const foundMock = this.mock.hasRequestBeenMocked(matchedPath, req.url);
 
     if (this.config.cors) {
       res = this.http.setCorsHeaders(req, res);
@@ -54,9 +55,9 @@ class RequestHandler {
         res.status(200).send(true);
       });
 
-    } else if (this.mock.hasRequestBeenMocked(matchedPath, req.url)) {
+    } else if (foundMock) {
 
-      res.status(200).send(this.mock.mockedRequests[matchedPath].response);
+      res.status(200).send(foundMock.response);
 
     } else {
 
