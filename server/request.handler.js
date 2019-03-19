@@ -54,7 +54,7 @@ class RequestHandler {
         res.status(200).send(true);
       });
 
-    } else if (this.hasRequestBeenMocked(matchedPath, req.url)) {
+    } else if (this.mock.hasRequestBeenMocked(matchedPath, req.url)) {
 
       res.status(200).send(this.mock.mockedRequests[matchedPath].response);
 
@@ -99,15 +99,6 @@ class RequestHandler {
 
   recordingAllowed() {
     return !!( this.config.allow_recording || process.argv[2] === 'allow_recording' );
-  }
-
-  hasRequestBeenMocked(matchedPath, matchedUrl) {
-    const foundMock = this.mock.mockedRequests[matchedPath];
-
-    return !!(
-      (foundMock && !foundMock.headers['mock-param']) ||
-      (foundMock && foundMock.headers['mock-param'] && matchedUrl.indexOf(foundMock.headers['mock-param']) > -1)
-    );
   }
 
   shouldMock(path) {

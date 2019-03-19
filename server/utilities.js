@@ -1,7 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const _ = require('lodash');
 
 class Utilities {
+
+  getParams(url) {
+    let arrayRouteParams = (url).replace('?', '&').split('&');
+    return arrayRouteParams;
+  }
 
   matchPath(path) {
     let out = '';
