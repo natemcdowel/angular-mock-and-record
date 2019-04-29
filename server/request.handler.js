@@ -18,7 +18,7 @@ class RequestHandler {
   }
 
   handle(req, res) {
-    
+
     const matchedPath = this.utilities.matchPath(req.path);
     const foundMock = this.mock.hasRequestBeenMocked(matchedPath, req.url);
 
