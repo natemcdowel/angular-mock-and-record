@@ -20,7 +20,7 @@ An Angular 4+ framework that mocks and records requests. Requests can be manuall
   "recording_dir": "./e2e/mocks",
   "allow_recording": false,
   "exclude_params": [],
-  "normalize_params": [] 
+  "normalize_params": []
 }
 ```
 
@@ -44,7 +44,7 @@ beforeAll(() => {
 - Next, run tests in the describe block:
 
 
-`    
+`
 it('should have the mocked request data', () => {
   expect(page.getFoo().getText()).toContain('bar');
 });
@@ -85,3 +85,8 @@ afterAll(() => {
 - Run `node ./node_modules/angular-mock-record/server/server.js allow_recording`
 - Hit `http://localhost:<port>/<api_path>` in a browser to test the recording functionality.  Once recorded, requests matching this URL will return the captured recording.
 - Finally, set up your application's E2E endpoint configuration to point to `http://localhost:<port>/<api_path>`. Start the server, then run `ng e2e`.  All requests will be recorded unless they are otherwise mocked.
+
+# Publishing to NPM
+
+- bump the version number in package.json
+- run `npm publish` locally
