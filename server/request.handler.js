@@ -61,13 +61,13 @@ class RequestHandler {
 
     } else {
 
-      this.checkTapesForRecording(res, req, this.config.tape_name);
+      this.checkTapesForRecording(res, req, this.config.tape_name, this.defaultDomain);
 
     }
   }
 
-  checkTapesForRecording(res, req, tapeToCheck) {
-    let recording = this.recorder.findRecording(req, tapeToCheck);
+  checkTapesForRecording(res, req, tapeToCheck, defaultDomain) {
+    let recording = this.recorder.findRecording(req, tapeToCheck, defaultDomain);
 
     if (recording) {
 

@@ -8,8 +8,8 @@ class Record {
     this.utilities = new Utilities();
   }
 
-  findRecording(req, label) {
-    let recording = this.recordingExists(req.path, req.url, label);
+  findRecording(req, label, defaultDomain) {
+    let recording = this.recordingExists(req.path, req.url, label, defaultDomain);
 
     if (recording) {
       return recording;
@@ -18,40 +18,40 @@ class Record {
     return null;
   }
 
-  recordingExists(requestPath, requestUrl, label) {
+  recordingExists(requestPath, requestUrl, label, defaultDomain) {
     let out = null;
     let tape = this.tapeExists(requestPath, label);
-
+    
     if (tape) {
       let recording = this.isRecordingOnTape(requestUrl, tape);
-      let recordingWithDomain = recording ? recording.find(rec => !!(rec.domain === this.config.domain && !rec.context)) : null;
-      let recordingWithContext = recording ? recording.find(rec => !!(rec.context === this.config.context && rec.domain === this.config.domain)) : null;
       let shouldCheckContext = this.config.context;
 
       if (recording.length) {
 
-        // If no context or domain, use the first
-        if (!recordingWithDomain && !shouldCheckContext) {
-
-          out = recording[0];
-  
-        // If no context and domain, use the domain recording
-        } else if (!shouldCheckContext && recordingWithDomain && !recordingWithDomain.context) {
-          
-          out = recordingWithDomain;
+        // when no context & default domain
+        if (!shouldCheckContext && this.config.domain === defaultDomain) {
+          // return the first recording if: it has no context AND domain is either empty or default
+          out = recording ? recording.find(rec => !!((!rec.domain || (rec.domain === defaultDomain)) && !rec.context)) : null;
+        }
+        
+        // when no context and client specific domain
+        if (!shouldCheckContext && this.config.domain != defaultDomain) {
+          // return the first recording if: it has no context AND matches requested domain
+          out = recording ? recording.find(rec => !!(rec.domain === this.config.domain && !rec.context)) : null;
 
         }
 
-        // Lastly record a context-specific recording if context enabled
-        if (shouldCheckContext && recordingWithContext) {
-          
-          out = recordingWithContext;
+        // when context enabled
+        if (shouldCheckContext) {
+          // return the first recording if: the domain matches requested domain AND context matches requested context
+          out = recording ? recording.find(rec => !!(rec.domain === this.config.domain && rec.context === this.config.context)) : null;
   
         } 
 
       }
-    }
-  
+
+    }  
+
     return out;
   }
 
