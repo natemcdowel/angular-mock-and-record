@@ -65,7 +65,7 @@ class Http {
   setCorsHeaders(req, res) {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, x-xsrf-token');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, x-xsrf-token, x-liveagent-affinity, x-liveagent-api-version');
 
     return res;
   }
