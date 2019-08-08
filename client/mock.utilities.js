@@ -68,6 +68,16 @@ var MockUtilities = /** @class */ (function () {
 		xmlHttp.send(null);
 		return xmlHttp.responseText;
 	};
+	MockUtilities.prototype.logout = function () {
+		browser.executeScript(this.logoutRequest());
+	};
+	MockUtilities.prototype.logoutRequest = function () {
+		var url = this.api_host + '/logout/';
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.open('GET', url, false);
+		xmlHttp.send(null);
+		return xmlHttp.responseText;
+	};
 	return MockUtilities;
 }());
 exports.MockUtilities = MockUtilities;
