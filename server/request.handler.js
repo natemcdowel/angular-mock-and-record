@@ -25,7 +25,7 @@ class RequestHandler {
     if (this.config.cors) {
       res = this.http.setCorsHeaders(req, res);
     }
-  
+
     if (this.shouldMock(req.path)) {
 
       this.mock.setRequestAsMocked(req.path, req.body, req.headers);
@@ -42,7 +42,7 @@ class RequestHandler {
       res.status(200).send(true);
 
     } else if (this.shouldClearMocks(req.path)) {
-  
+
       this.mock.clearMockedRequests();
       this.auth._session_id = '';
       this.setDefaultDomain();
@@ -52,6 +52,12 @@ class RequestHandler {
     } else if (this.shouldLogin(req.path)) {
 
       this.auth.login( this.auth.getUser(req.path), this.config.domain ).then(_session_id => {
+        res.status(200).send(true);
+      });
+
+    } else if (this.shouldLogout(req.path)) {
+
+      this.auth.logout().then(() => {
         res.status(200).send(true);
       });
 
@@ -114,6 +120,10 @@ class RequestHandler {
     return !!( path.includes('/login/') );
   }
 
+  shouldLogout(path) {
+    return !!( path.includes('/logout/') );
+  }
+
   shouldSetDomain(path) {
     return !!( path.includes('/domain/') );
   }
@@ -121,7 +131,7 @@ class RequestHandler {
   shouldSetContext(path) {
     return !!( path.includes('/context/') );
   }
-  
+
   refreshConfigs() {
     this.http = new Http(this.config);
     this.recorder = new Record(this.config);

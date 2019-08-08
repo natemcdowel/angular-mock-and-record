@@ -9,6 +9,7 @@ class Http {
 
     return new Promise((resolve, reject) => {
       let headers = this.setRequestHeaders(req.headers, _session_id);
+      console.log('REQUEST: ', this.config.domain + req.url);
 
       this.http.get(
       {
