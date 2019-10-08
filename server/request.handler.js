@@ -3,6 +3,7 @@ const Record = require('./record.js');
 const Mock = require('./mock.js');
 const Auth = require('./auth.js');
 const Utilities = require('./utilities.js');
+let ignore = require('../../../mock.record.ignore.json');
 
 class RequestHandler {
 
@@ -81,20 +82,28 @@ class RequestHandler {
 
     } else {
 
-      if (!this.recordingAllowed()) {
+      if (ignore.includes(req.path)) {
+        res.status(204).send(null);
+      }
+
+      else if (!this.recordingAllowed()) {
         console.error('\nAn unrecorded request was detected:\n' + req.url);
         console.error('\nTo record new requests, use the `allow_recording` parameter\n');
         process.exit(1);
       }
 
-      this.http.get(req, this.auth._session_id).then(data => {
+      else {
 
-        this.sendResponse(data, res);
-        data.mock_request_url = req.url;
-        this.recorder.recordTape(data, req.path, tapeToCheck);
-        console.log('\nRecorded request:  ' + req.url + '\n');
+        this.http.get(req, this.auth._session_id).then(data => {
 
-      });
+          this.sendResponse(data, res);
+          data.mock_request_url = req.url;
+          this.recorder.recordTape(data, req.path, tapeToCheck);
+          console.log('\nRecorded request:  ' + req.url + '\n');
+
+        });
+
+      }
 
     }
   }
