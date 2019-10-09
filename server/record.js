@@ -12,6 +12,11 @@ class Record {
     let recording = this.recordingExists(req.path, req.url, label, defaultDomain);
 
     if (recording) {
+
+      if (this.config.cleanup == true) {
+        this.editTape(recording, req.path, label);
+      }
+
       return recording;
     }
 
@@ -64,6 +69,31 @@ class Record {
       );
     } catch(error) {
       return null;
+    }
+  }
+
+  editTape(recording, requestPath, label) {
+    let tape = this.tapeExists(requestPath, label);
+    let index = 0;
+    let foundIndex = -1
+    let modified;
+
+    tape.forEach(obj => {
+      if (obj.mock_request_url == recording.mock_request_url && obj.domain == recording.domain && obj.context == recording.context) {
+        foundIndex = index;
+      }
+
+      index++;
+    });
+
+    if (foundIndex > -1) {
+      modified = tape[foundIndex];
+      modified['used'] = true;
+      tape[foundIndex] = modified;
+      this.fs.writeFileSync(
+        this.config.recording_dir + this.utilities.normalizePath(requestPath) + '/' + label + '.json',
+        JSON.stringify(tape, null, 2) + '\r\n'
+      );
     }
   }
 
