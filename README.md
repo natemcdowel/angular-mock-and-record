@@ -1,6 +1,6 @@
-![Logo](Angular Mock Record Logo.png)
+![Logo](logo.png)
 
-An Angular 4+ framework that records, replays, and stubs HTTP interactions.
+# An Angular 4+ framework that records, replays, and stubs HTTP interactions.
 
 # Installation
 - Run `npm install angular-mock-record`
