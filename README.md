@@ -1,4 +1,4 @@
-# angular-mock-record
+ANGULAR MOCK AND RECORD
 An Angular 4+ framework that records, replays, and stubs HTTP interactions.
 
 # Installation
