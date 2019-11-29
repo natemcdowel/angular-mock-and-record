@@ -1,5 +1,5 @@
 # angular-mock-record
-An Angular 4+ framework that mocks and records requests. Requests can be manually mocked or recorded like VCR.
+An Angular 4+ framework that records, replays, and stubs HTTP interactions.
 
 # Installation
 - Run `npm install angular-mock-record`
