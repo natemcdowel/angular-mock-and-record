@@ -1,4 +1,5 @@
-ANGULAR MOCK AND RECORD
+![Logo](Angular Mock Record Logo.png)
+
 An Angular 4+ framework that records, replays, and stubs HTTP interactions.
 
 # Installation
