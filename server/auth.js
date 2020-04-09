@@ -24,7 +24,7 @@ class Auth {
         }
       ).then(data => {
 
-        if (!data) {
+        if (!(data && data.body)) {
           return resolve();
         }
 
